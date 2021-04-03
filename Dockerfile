@@ -1,26 +1,27 @@
 FROM python:3.6
 
+# update python-dev
+RUN apt update && apt install python-dev -y
+
 # App source-code directory
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /opt/python/app
 
 # Set Home Directory
 WORKDIR /opt/python/app
 
 # Install python dependencies
-COPY requirements.txt /opt/python/app
+COPY app/requirements.txt /opt/python/app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy src code to Container
-COPY . /opt/python/app
-
-# Env variables
-ENV PORT 8080
+COPY app/ /opt/python/app
 
 # Expose ports
-EXPOSE $PORT
+EXPOSE 8080
 
 # Set persistent data
 VOLUME ["/app-data"]
 
 # Run python app
-CMD gunicorn -b :$PORT -c gunicorn.conf.py main:app
+ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:8080", "--access-logfile", "-", "--error-logfile", "-"]
+CMD ["app:app"]

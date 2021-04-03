@@ -5,10 +5,10 @@ import multiprocessing
 worker_class = 'gthread'
 
 # Number of workers in use;
-workers = 4
+workers = 2
 
 # Use an arbitrary number of threads for concurrency;
-threads = 20
+threads = 10
 
 # Store the process ID of gunicorn.  Used for testing;
 
