@@ -10,7 +10,7 @@ pipeline {
         disableConcurrentBuilds()
     }
   tools {
-    'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
+    'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '1.17'
   }
   environment {
     DOCKER_CERT_PATH = credentials('id-for-a-docker-cred')
