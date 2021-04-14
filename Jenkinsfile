@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    imagename = "ci-cd/test"
+    imagename = "flask-apps/python-flask"
     dockerImage = ''
     ecrurl = "https://182952452433.dkr.ecr.us-east-2.amazonaws.com"
     ecrcredentials = "ecr:us-east-2:ecr-usage-credentials"
