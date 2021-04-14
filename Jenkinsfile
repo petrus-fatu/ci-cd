@@ -4,20 +4,38 @@ import groovy.json.JsonSlurper
 import java.net.URL
 
 pipeline {
+
+  environment {
+    imagename = "ci-cd/test"
+    dockerImage = ''
+  }
+
   agent any
     options {
-        timeout(time: 1, unit: 'DAYS')
-        disableConcurrentBuilds()
+      timeout(time: 1, unit: 'DAYS')
+       disableConcurrentBuilds()
     }
-  environment {
-    DOCKER_CERT_PATH = credentials('ecr-usage-credentials')
-  }
+
   stages {
-    stage('testing') {
+    stage('Checkout SCM') {
       steps {
-        sh "ls -l" // DOCKER_CERT_PATH is automatically picked up by the Docker client
+        checkout scm
+      }
+    }
+
+    stage('Building image') {
+      steps {
+        script {
+          dockerImage = docker.build imagename
+        }
+      }
+    }
+
+    stage('Remove Unused docker image') {
+      steps{
+      sh "docker rmi $imagename:$BUILD_NUMBER"
+      sh "docker rmi $imagename:latest"
       }
     }
   }
 }
-
