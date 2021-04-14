@@ -4,32 +4,23 @@ import groovy.json.JsonSlurper
 import java.net.URL
 
 pipeline {
-    agent none
+  agent any
     options {
         timeout(time: 1, unit: 'DAYS')
         disableConcurrentBuilds()
     }
-    stages {
-        stage("Init") {
-            agent any
-            steps { echo step 1 }
-        }
-        stage("Run App Security Scan") {
-            agent any 
-            steps { echo step 3 }
-        }
-        stage("Build and Register Image") {
-            agent any
-            steps { echo step 4 }
-        }
-        stage("Deploy Image") {
-            agent any
-            steps { echo deploy step 1 }
-        }
-        stage("Test App") {
-            agent any
-            steps { echo test step }
-        }
+  tools {
+    'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
+  }
+  environment {
+    DOCKER_CERT_PATH = credentials('id-for-a-docker-cred')
+  }
+  stages {
+    stage('foo') {
+      steps {
+        sh "docker version" // DOCKER_CERT_PATH is automatically picked up by the Docker client
+      }
     }
+  }
 }
 
