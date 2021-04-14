@@ -1,13 +1,10 @@
-#!groovy
-
-import groovy.json.JsonSlurper
-import java.net.URL
-
 pipeline {
 
   environment {
     imagename = "ci-cd/test"
     dockerImage = ''
+    ecrurl = "https://182952452433.dkr.ecr.us-east-2.amazonaws.com"
+    ecrcredentials = "ecr:us-east-2:ecr-usage-credentials"
   }
 
   agent any
@@ -23,7 +20,7 @@ pipeline {
       }
     }
 
-    stage('Building image') {
+    stage('Build image') {
       steps {
         script {
           dockerImage = docker.build imagename
@@ -31,8 +28,21 @@ pipeline {
       }
     }
 
+    stage('Deploy image') {
+      steps{
+        script {
+          docker.withRegistry(ecrurl, ecrcredentials) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+          }
+        }
+      }
+    }
+
+
     stage('Remove Unused docker image') {
       steps{
+      sh "docker rmi $imagename:$BUILD_NUMBER"
       sh "docker rmi $imagename:latest"
       }
     }
