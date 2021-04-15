@@ -31,8 +31,8 @@ pipeline {
     stage('sonar-qube run') {
       environment {
         SCANNER_HOME = tool 'sonarqube-scanner'
-        ORGANIZATION = "pfatu-ci-cd"
-        PROJECT_NAME = "pfatu-declarative-pipeline"
+        ORGANIZATION = "Administrator"
+        PROJECT_NAME = "flask-app-python"
       }
       steps {
         withSonarQubeEnv('sonar-qube') {
