@@ -14,13 +14,13 @@ pipeline {
     }
 
   stages {
-    stage('Checkout SCM') {
+    stage('Checkout Version Control') {
       steps {
         checkout scm
       }
     }
 
-    stage('Build image') {
+    stage('Build Docker Image') {
       steps {
         script {
           dockerImage = docker.build imagename
@@ -28,7 +28,7 @@ pipeline {
       }
     }
 
-    stage('sonar-qube run') {
+    stage('SonarQube Code Scan') {
       environment {
         SCANNER_HOME = tool 'sonarqube-scanner'
         ORGANIZATION = "Administrator"
@@ -44,7 +44,13 @@ pipeline {
       }
     }
 
-    stage('Deploy image') {
+    stage("SonarQube Quality Gate") {
+      steps {
+        waitForQualityGate abortPipeline: true
+        }
+      }
+
+    stage('Deploy Docker Image') {
       steps{
         script {
           docker.withRegistry(ecrurl, ecrcredentials) {
@@ -55,7 +61,7 @@ pipeline {
       }
     }
 
-    stage('Remove Unused docker image') {
+    stage('Remove Docker Images') {
       steps{
         sh "docker system prune -f --all"
       }
