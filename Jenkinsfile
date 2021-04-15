@@ -36,7 +36,7 @@ pipeline {
       }
       steps {
         withSonarQubeEnv('sonar-qube') {
-            sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
+            sh "$SCANNER_HOME/bin/sonar-scanner \
             -Dsonar.java.binaries=build/classes/java/ \
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.sources=."
