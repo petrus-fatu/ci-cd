@@ -53,9 +53,10 @@ pipeline {
     stage('Deploy Docker Image') {
       steps{
         script {
-          docker.withRegistry(ecrurl, ecrcredentials) {
-            dockerImage.push("$BUILD_NUMBER")
-             dockerImage.push('latest')
+          if( "${env.BRANCH_NAME}" == "develop" ) {
+            docker.withRegistry(ecrurl, ecrcredentials) {
+              dockerImage.push("$BUILD_NUMBER")
+              dockerImage.push('latest')
           }
         }
       }
