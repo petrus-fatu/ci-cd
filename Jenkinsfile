@@ -59,7 +59,6 @@ pipeline {
             docker.withRegistry(ecrurl, ecrcredentials) {
               dockerImage.push("$BUILD_NUMBER")
               dockerImage.push('latest')
-            }
           }
         }
       }
