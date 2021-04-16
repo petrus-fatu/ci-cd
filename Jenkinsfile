@@ -51,7 +51,9 @@ pipeline {
       }
 
     stage('Deploy Docker Image') {
-      when (BRANCH_NAME != 'develop') {
+      when {
+        branch "develop"
+           }
         steps {
           script {
             docker.withRegistry(ecrurl, ecrcredentials) {
