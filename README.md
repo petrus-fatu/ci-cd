@@ -7,3 +7,7 @@ Mainly used to demonstrate integration between SonarQube, Jenkins & GitHub.
 ## Status checks
 
 PRs are blocked by a Jenkins status-check;
+
+## For demo
+
+Changed MD
